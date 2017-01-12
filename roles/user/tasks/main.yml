@@ -13,8 +13,10 @@
 - name: Add sudoers users to deployers group
   user: name=deploy groups=deployers append=yes state=present shell=/bin/zsh
 
-
 - name: Set up authorized keys for the deployer user
-  authorized_key: user=deploy key="{{item}}"
-  with_file:
-    - /Users/emilio/.ssh/emilioeduardob.pub
+  authorized_key:
+    user: deploy
+    key: https://github.com/emilioeduardob.keys
+
+- name: Create basic zsh config
+  file: name="/home/deploy/.zshrc" state=touch owner=deploy group=deploy

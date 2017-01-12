@@ -1,0 +1,5 @@
+- name: Install general gems
+  shell: gem install {{item}}
+  with_items:
+    - bundler
+    - rake
