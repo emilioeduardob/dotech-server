@@ -1,0 +1,11 @@
+---
+dependencies:
+  - role: zzet.rbenv
+    rbenv_users:
+      - deploy
+    rbenv:
+      env: user
+      version: v1.1.0
+      default_ruby: 2.3.1
+      rubies:
+        - version: 2.3.1

@@ -2,11 +2,13 @@
 - hosts: all
   become: true
   remote_user: root
-  gather_facts: no
-  pre_tasks:
-    - name: 'install python2'
-      raw: sudo apt-get -y install python-simplejson
-  tasks:
-    - include: plays/basic.yml
-    - include: plays/user.yml
-    - include: plays/nginx.yml
+  gather_facts: yes
+  # pre_tasks:
+  #   - name: 'install python2'
+  #     raw: sudo apt-get -y install python-simplejson
+  roles:
+    - role: common
+    - role: user
+    - role: rbenv
+    - role: yadr
+    - role: nginx
