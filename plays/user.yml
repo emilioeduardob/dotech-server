@@ -1,0 +1,21 @@
+---
+- name: Make sure we have a 'deployers' group
+  group:
+    name: deployers
+    state: present
+
+- name: Allow 'deployers' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%deployers'
+    line: '%deployers ALL=(ALL) NOPASSWD: ALL'
+
+- name: Add sudoers users to deployers group
+  user: name=deploy groups=deployers append=yes state=present shell=/bin/zsh
+
+
+- name: Set up authorized keys for the deployer user
+  authorized_key: user=deploy key="{{item}}"
+  with_file:
+    - /Users/emilio/.ssh/emilioeduardob.pub

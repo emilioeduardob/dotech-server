@@ -1,0 +1,27 @@
+---
+- name: Install basic packages
+  apt: name={{item}} state=present
+  with_items:
+    - build-essential
+    - openssl
+    - libreadline6
+    - libreadline6-dev
+    - curl
+    - git-core
+    - zlib1g
+    - zlib1g-dev
+    - libssl-dev
+    - libyaml-dev
+    - libxml2-dev
+    - libxslt-dev
+    - autoconf
+    - libc6-dev
+    - ncurses-dev
+    - automake
+    - libtool
+    - bison
+    - libpcre3
+    - libpcre3-dev
+
+- name: Install zsh
+  apt: name=zsh state=present
