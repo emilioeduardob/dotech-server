@@ -1,1 +1,3 @@
 - src: zzet.rbenv
+- src: gantsign.oh-my-zsh
+- src: geerlingguy.nodejs

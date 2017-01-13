@@ -1,5 +1,19 @@
-- name: Install general gems
-  shell: gem install {{item}}
+# - name: Install general gems
+#   shell: gem install {{item}}
+#   args:
+#     executable: /bin/zsh
+#   become_user: deploy
+#   with_items:
+#     - bundler
+#     - rake
+
+- name: rbenv config
+  become_user: deploy
+  lineinfile:
+    dest: "~/.zshrc"
+    line: "{{ item }}"
+    state: present
   with_items:
-    - bundler
-    - rake
+    - 'export PATH="$HOME/.rbenv/bin:$PATH"'
+    - 'export RBENV_ROOT="$HOME/.rbenv/"'
+    - 'eval "$(rbenv init -)"'

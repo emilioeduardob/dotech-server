@@ -3,12 +3,23 @@
   become: true
   remote_user: root
   gather_facts: yes
+  # gather_facts: no
   # pre_tasks:
   #   - name: 'install python2'
   #     raw: sudo apt-get -y install python-simplejson
   roles:
-    # - role: common
-    # - role: user
+    - role: common
+    - role: user
+    - role: gantsign.oh-my-zsh
+      users:
+        - username: deploy
+          oh_my_zsh:
+            theme: robbyrussell
+            plugins:
+              - git
+              - vi-mode
+              - git-extras
+              - common-aliases
     - role: rbenv
-    # - role: yadr
-    # - role: nginx
+    - role: nginx
+    - role: geerlingguy.nodejs
