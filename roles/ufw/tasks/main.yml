@@ -1,0 +1,25 @@
+---
+- name: Install UFW
+  tags:
+    - firewall
+  apt: name=ufw state=present
+
+- name: Setup ufw
+  tags:
+    - firewall
+  ufw: state=enabled policy=deny
+
+- name: Allow ssh traffic
+  tags:
+    - firewall
+  ufw: rule=allow port=22 proto=tcp
+
+- name: Allow Web traffic
+  tags:
+    - firewall
+  ufw: rule=allow port=80 proto=tcp
+
+- name: Allow mosh traffic
+  tags:
+    - firewall
+  ufw: rule=allow proto=udp port=60000:60010

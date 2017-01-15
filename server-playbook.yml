@@ -22,5 +22,6 @@
               - git-extras
               - common-aliases
     - role: rbenv
+    - role: ufw
     - role: nginx
     - role: geerlingguy.nodejs

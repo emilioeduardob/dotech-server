@@ -1,4 +1,30 @@
 ---
+- locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: fix LC_ALL
+  lineinfile: dest=/etc/default/locale
+                regexp='^LC_ALL'
+                insertafter=EOF
+                line='LC_ALL="en_US.UTF-8"'
+                state=present
+  register: locale_update
+
+
+- debug: msg="{{ locale_update.changed }}"
+
+- name: fix LC_ALL
+  lineinfile: dest=/etc/default/locale
+                regexp='^LC_ALL'
+                insertafter=EOF
+                line='LC_ALL="en_US.UTF-8"'
+                state=present
+
+- name: reconfigure locales
+  shell: dpkg-reconfigure locales
+  when: locale_update.changed
+
 - name: Install basic packages
   apt: name={{item}} state=present
   with_items:
@@ -22,6 +48,12 @@
     - bison
     - libpcre3
     - libpcre3-dev
+    - mosh
+    - vim
+    - fail2ban
+    - unattended-upgrades
+    - logwatch
+    - zsh
 
-- name: Install zsh
-  apt: name=zsh state=present
+- name: Adjust APT update intervals
+  copy: src=apt_periodic dest=/etc/apt/apt.conf.d/10periodic
