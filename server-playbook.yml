@@ -10,6 +10,7 @@
   roles:
     - role: common
     - role: user
+    - role: yarn
     - role: postgres
     - role: gantsign.oh-my-zsh
       users:

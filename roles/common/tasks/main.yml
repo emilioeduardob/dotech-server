@@ -50,6 +50,7 @@
     - libpcre3-dev
     - mosh
     - vim
+    - htop
     - fail2ban
     - unattended-upgrades
     - logwatch
