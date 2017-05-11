@@ -14,6 +14,16 @@
     - firewall
   ufw: rule=allow port=22 proto=tcp
 
+- name: Allow Node Web traffic
+  tags:
+    - firewall
+  ufw: rule=allow port=5001 proto=tcp
+
+- name: Allow SSL Web traffic
+  tags:
+    - firewall
+  ufw: rule=allow port=443 proto=tcp
+
 - name: Allow Web traffic
   tags:
     - firewall
