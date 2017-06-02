@@ -1,0 +1,17 @@
+---
+- name: Install certbot ppa
+  apt_repository: repo='ppa:certbot/certbot' state=present
+
+- name: Install certbot client
+  apt: name=python-certbot-nginx state=present
+
+- name: Run certbox
+  shell: yes '' | certbot --nginx --redirect --keep --agree-tos --non-interactive --email emilioeduardob@gmail.com
+
+- name: Install Cron
+  cron:
+    name: Certbot renew Certificate every month
+    minute: 0
+    hour: 0
+    day: 15
+    job: "certbot renew"

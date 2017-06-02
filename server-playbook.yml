@@ -26,4 +26,5 @@
     - role: ufw
     - role: nginx
     - role: geerlingguy.nodejs
+    - role: ssl
     - role: lockdown
