@@ -16,3 +16,4 @@ npm_config_unsafe_perm: "false"
 nodejs_npm_global_packages:
  # Install a specific version of a package.
  - name: yarn
+ - name: bower
