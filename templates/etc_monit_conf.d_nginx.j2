@@ -1,0 +1,6 @@
+check process nginx with pidfile /var/run/nginx.pid
+      start program = "/etc/init.d/nginx start"
+      stop  program = "/etc/init.d/nginx stop"
+      restart program  = "/etc/init.d/nginx restart"
+      if failed port 80 protocol http for 2 cycles then restart
+      if cpu > 95% for 3 cycles then alert

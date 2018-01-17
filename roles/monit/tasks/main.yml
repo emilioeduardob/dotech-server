@@ -10,9 +10,15 @@
   with_items:
     - sshd
     - monit
-    # - postgres
+    - nginx
+    - disk
   notify:
     - restart monit
+
+- name: Allow monit traffic
+  tags:
+    - firewall
+  ufw: rule=allow port={{monit_port}} proto=tcp
 
 - name: Start Monit
   become: yes
