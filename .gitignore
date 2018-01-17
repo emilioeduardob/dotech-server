@@ -1,2 +1,3 @@
 *.retry
 hosts
+default_vars.yml

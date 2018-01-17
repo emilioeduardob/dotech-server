@@ -1,0 +1,19 @@
+- name: Install monit packages
+  apt: name={{item}} state=present
+  with_items:
+    - monit
+
+- name: Monit | Copy the sshd/nginx monit service files
+  template:
+    src: "etc_monit_conf.d_{{item}}.j2"
+    dest: "/etc/monit/conf.d/{{item}}"
+  with_items:
+    - sshd
+    - monit
+    # - postgres
+  notify:
+    - restart monit
+
+- name: Start Monit
+  become: yes
+  service: name=monit state=running enabled=yes
