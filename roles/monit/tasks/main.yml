@@ -1,6 +1,62 @@
-- name: Install monit packages
+- name: Install monit from apt
   apt: name={{item}} state=present
   with_items:
+    - monit
+
+- name: Allow monit traffic
+  tags:
+    - firewall
+  ufw: rule=allow port={{monit_port}} proto=tcp
+
+- name: /var/monit/ dir
+  file: path=/var/monit/ state=directory
+  tags:
+    - monit packages
+    - monit
+
+- name: Download monit x64
+  get_url: url=https://mmonit.com/monit/dist/binary/5.25.1/monit-5.25.1-linux-x64.tar.gz dest=/var/monit mode=0755
+  when: "ansible_architecture == 'x86_64'"
+
+- name: Download monit x86
+  get_url: url=https://mmonit.com/monit/dist/binary/5.25.1/monit-5.25.1-linux-x86.tar.gz dest=/var/monit mode=0755
+  when: "ansible_architecture != 'x86_64'"
+
+- name: Unzip monit x64
+  unarchive: src=/var/monit/monit-5.25.1-linux-x64.tar.gz dest=/var/monit copy=no
+  when: "ansible_architecture == 'x86_64'"
+  tags:
+    - monit packages
+    - monit
+
+- name: Unzip monit x86
+  unarchive: src=/var/monit/monit-5.25.1-linux-x86.tar.gz dest=/var/monit copy=no
+  when: "ansible_architecture != 'x86_64'"
+  tags:
+    - monit packages
+    - monit
+
+- name: Stop monit Deploy
+  service:
+    name: monit
+    state: stopped
+  tags:
+    - reload mmonit
+    - monit
+
+- name: monit bin
+  shell: cp /var/monit/monit-5.25.1/bin/monit /usr/bin/
+  ignore_errors: true
+  tags:
+    - monit packages
+    - monit
+
+
+- name: Transfer monit Config /etc/monitrc
+  shell: cp /var/monit/monit-5.25.1/conf/monitrc /etc/monit/monitrc
+  ignore_errors: true
+  tags:
+    - monit config
     - monit
 
 - name: Monit | Copy the sshd/nginx monit service files
@@ -14,12 +70,3 @@
     - disk
   notify:
     - restart monit
-
-- name: Allow monit traffic
-  tags:
-    - firewall
-  ufw: rule=allow port={{monit_port}} proto=tcp
-
-- name: Start Monit
-  become: yes
-  service: name=monit state=running enabled=yes
