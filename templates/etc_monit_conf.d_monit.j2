@@ -256,12 +256,17 @@ set httpd port {{monit_port}}
 #       then alert
 #
 #
+
+
 ###############################################################################
 ## Includes
 ###############################################################################
+
+include /etc/monit/conf.d/*
+
 ##
 ## It is possible to include additional configuration parts from other files or
 ## directories.
 #
-#   include /etc/monit/conf.d/*
+# include /etc/monit/conf.d/*
 #

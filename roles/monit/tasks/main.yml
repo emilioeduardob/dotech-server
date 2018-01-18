@@ -59,13 +59,20 @@
     - monit config
     - monit
 
+- name: Monit | Copy the main monit config
+  template:
+    src: "etc_monit_conf.d_monit.j2"
+    dest: "/etc/monit/monitrc"
+    mode: '0600'
+  notify:
+    - restart monit
+
 - name: Monit | Copy the sshd/nginx monit service files
   template:
     src: "etc_monit_conf.d_{{item}}.j2"
     dest: "/etc/monit/conf.d/{{item}}"
   with_items:
     - sshd
-    - monit
     - nginx
     - disk
   notify:
