@@ -77,3 +77,10 @@
     - disk
   notify:
     - restart monit
+
+- name: "Monit symlink"
+  file:
+    path: "/etc/monitrc"
+    state: "link"
+    src: "/etc/monit/monitrc"
+  become: true
