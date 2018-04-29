@@ -5,7 +5,12 @@
     - ssl
 
 - name: Install certbot client
-  apt: name=python-certbot-nginx state=present
+  apt: name=certbot state=latest update_cache=yes
+  tags:
+    - ssl
+
+- name: Install certbot nginx
+  apt: name=python-certbot-nginx state=latest
   tags:
     - ssl
 
