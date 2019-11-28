@@ -26,35 +26,35 @@
   when: locale_update.changed
 
 - name: Install basic packages
-  apt: name={{item}} state=present
-  with_items:
-    - build-essential
-    - openssl
-    - libreadline6
-    - libreadline6-dev
-    - curl
-    - git-core
-    - zlib1g
-    - zlib1g-dev
-    - libssl-dev
-    - libyaml-dev
-    - libxml2-dev
-    - libxslt-dev
-    - autoconf
-    - libc6-dev
-    - ncurses-dev
-    - automake
-    - libtool
-    - bison
-    - libpcre3
-    - libpcre3-dev
-    - mosh
-    - vim
-    - htop
-    - fail2ban
-    - unattended-upgrades
-    - logwatch
-    - zsh
+  apt:
+    state: present
+    name:
+      - build-essential
+      - openssl
+      - curl
+      - git-core
+      - zlib1g
+      - zlib1g-dev
+      - libssl-dev
+      - libyaml-dev
+      - libxml2-dev
+      - libxslt-dev
+      - silversearcher-ag
+      - autoconf
+      - libc6-dev
+      - ncurses-dev
+      - automake
+      - libtool
+      - bison
+      - libpcre3
+      - libpcre3-dev
+      - mosh
+      - vim
+      - htop
+      - fail2ban
+      - unattended-upgrades
+      - logwatch
+      - zsh
 
 - name: Adjust APT update intervals
   copy: src=apt_periodic dest=/etc/apt/apt.conf.d/10periodic
