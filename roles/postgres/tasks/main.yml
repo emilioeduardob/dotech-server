@@ -1,16 +1,38 @@
+- name: Add PostgreSQL APT Key
+  apt_key: url="https://www.postgresql.org/media/keys/ACCC4CF8.asc" state=present
+  register: postgres_apt_key_added
+  retries: 10
+  until: postgres_apt_key_added is success
+
+# This makes no changes to the system, so we always set changed_when to false
+- name: Get Ubuntu Release Type
+  command: "lsb_release -cs"
+  changed_when: false
+  register: ubuntu_release_type
+
+- name: Add Postgres Repository
+  apt_repository: repo="deb http://apt.postgresql.org/pub/repos/apt/ {{ ubuntu_release_type.stdout }}-pgdg main"
+  register: postgres_add_apt_repo_ready
+
+- name: Update Apt Cache
+  apt: update_cache=true
+  when: postgres_add_apt_repo_ready is changed
+  register: postgres_apt_is_fresh
+
 - name: Install postgres
-  apt: name={{item}} state=present
+  apt:
+    state: present
+    name:
+      - postgresql-server-dev-11
+      - postgresql-11
+      - postgresql-contrib-11
   become: True
-  with_items:
-    - postgresql-server-dev-9.5
-    - postgresql-9.5
-    - postgresql-contrib-9.5
   tags:
     - postgresql
 
 - name: Config security for postgres user
   lineinfile:
-    dest: /etc/postgresql/9.5/main/pg_hba.conf
+    dest: /etc/postgresql/11/main/pg_hba.conf
     regexp: '^local\s+all\s+postgres+\s+peer'
     line: "local   all             postgres                                trust"
     state: present
