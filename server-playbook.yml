@@ -5,11 +5,10 @@
   gather_facts: yes
   vars_files:
     - default_vars.yml
-  # gather_facts: no
-  # pre_tasks:
-  #   - name: 'install python2'
-  #     raw: sudo apt-get -y install python-simplejson
   roles:
+    - role: geerlingguy.swap
+      vars:
+        swap_file_size_mb: '1024'
     - role: common
     - role: user
     - role: postgres
