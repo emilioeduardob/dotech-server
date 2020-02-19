@@ -44,6 +44,7 @@
       - libc6-dev
       - ncurses-dev
       - automake
+      - software-properties-common
       - libtool
       - bison
       - libpcre3
