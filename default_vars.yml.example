@@ -10,6 +10,8 @@ monit_mailserver_username: "username"
 monit_mailserver_password: "password"
 # monit_mailserver_encryption:
 monit_mailserver_timeout: 60
+nodejs_version: "10.x"
+ansible_python_interpreter: /usr/bin/python3
 
 monit_port: 1313
 #monit_address: "localhost"
