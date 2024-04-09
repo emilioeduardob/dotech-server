@@ -5,7 +5,7 @@ dependencies:
       - deploy
     rbenv:
       env: user
-      version: v1.1.0
-      default_ruby: 2.3.1
+      version: v1.1.2
+      default_ruby: 3.3.0
       rubies:
-        - version: 2.3.1
+        - version: 3.3.0

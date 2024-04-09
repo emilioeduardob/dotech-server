@@ -1,7 +1,7 @@
-Ansible Role: Oh-My-Zsh
+Ansible Role: Oh My Zsh
 =======================
 
-[![Build Status](https://travis-ci.org/gantsign/ansible-role-oh-my-zsh.svg?branch=master)](https://travis-ci.org/gantsign/ansible-role-oh-my-zsh)
+[![Tests](https://github.com/gantsign/ansible-role-oh-my-zsh/workflows/Tests/badge.svg)](https://github.com/gantsign/ansible-role-oh-my-zsh/actions?query=workflow%3ATests)
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-gantsign.oh--my--zsh-blue.svg)](https://galaxy.ansible.com/gantsign/oh-my-zsh)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/gantsign/ansible-role-oh-my-zsh/master/LICENSE)
 
@@ -10,7 +10,7 @@ Role to download, install and configure [Oh-My-Zsh](http://ohmyz.sh/).
 Requirements
 ------------
 
-* Ansible >= 1.9
+* Ansible >= 5 (Ansible Core >= 2.12)
 
 * Linux Distribution
 
@@ -18,37 +18,37 @@ Requirements
 
         * Debian
 
-            * Wheezy (7)
-            * Jessie (8)
+            * Stretch (9)
+            * Buster (10)
+            * Bullseye (11)
 
         * Ubuntu
 
-            * Trusty (14.04)
-            * Wily (15.10)
-            * Xenial (16.04)
+            * Bionic (18.04)
+            * Focal (20.04)
 
     * RedHat Family
 
-        * CentOS
+        * Rocky Linux
 
-            * 7
+            * 8
 
         * Fedora
 
-            * 25
+            * 35
 
     * SUSE Family
 
-        * OpenSUSE
+        * openSUSE
 
-            * 42.2
+            * 15.3
 
     * Note: other versions are likely to work but have not been tested.
 
 Role Variables
 --------------
 
-The following variable will change the behavior of this role (default values
+The following variables will change the behavior of this role (default values
 are shown below):
 
 ```yaml
@@ -59,6 +59,26 @@ oh_my_zsh_theme: robbyrussell
 oh_my_zsh_plugins:
   - git
 
+# Whether to install by default for all specified users.
+# May be overridden by `oh_my_zsh: install:` under each user.
+oh_my_zsh_install: true
+
+# Default update mode for Oh-My-Zsh
+# accepted values are:
+# disabled (default)
+# auto
+# reminder
+oh_my_zsh_update_mode: disabled
+
+# Default update frequency in days. When the update mode is set to a value other
+# than "disabled", this is the frequency (in days) to check for a new version.
+# The value 0 will check every time a new shell session starts.
+oh_my_zsh_update_frequency: 13
+
+# Whether to write the ~/.zshrc file
+# May be overridden by `oh_my_zsh: write_zshrc:` under each user.
+oh_my_zsh_write_zshrc: true
+
 # User configuration
 # Important: oh-my-zsh is installed per user so you need to specify the users to install it for.
 users:
@@ -67,12 +87,20 @@ users:
       theme: robbyrussell
       plugins:
         - git
+      update_mode: reminder
+      update_frequency: 3
+      write_zshrc: false
   - username: example2
     oh_my_zsh:
       theme: robbyrussell
       plugins:
         - git
         - mvn
+      update_mode: auto
+      update_frequency: 10
+  - username: example3
+    oh_my_zsh:
+      install: false
 ```
 
 Example Playbook
@@ -108,13 +136,19 @@ To develop or test you'll need to have installed the following:
 * [Ansible](https://www.ansible.com/)
 * [Molecule](http://molecule.readthedocs.io/)
 
-To run the role (i.e. the `tests/test.yml` playbook), and test the results
-(`tests/test_role.py`), execute the following command from the project root
-(i.e. the directory with `molecule.yml` in it):
+Because the above can be tricky to install, this project includes
+[Molecule Wrapper](https://github.com/gantsign/molecule-wrapper). Molecule
+Wrapper is a shell script that installs Molecule and it's dependencies (apart
+from Linux) and then executes Molecule with the command you pass it.
+
+To test this role using Molecule Wrapper run the following command from the
+project root:
 
 ```bash
-molecule test
+./moleculew test
 ```
+
+Note: some of the dependencies need `sudo` permission to install.
 
 License
 -------
