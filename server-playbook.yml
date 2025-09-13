@@ -6,9 +6,6 @@
   vars_files:
     - default_vars.yml
   roles:
-    - role: geerlingguy.swap
-      vars:
-        swap_file_size_mb: '1024'
     - role: common
     - role: user
     - role: postgres
@@ -26,6 +23,4 @@
     - role: ufw
     - role: nginx
     - role: geerlingguy.nodejs
-    - role: ssl
-    - role: monit
     - role: lockdown

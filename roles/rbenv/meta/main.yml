@@ -6,6 +6,6 @@ dependencies:
     rbenv:
       env: user
       version: v1.1.2
-      default_ruby: 3.3.0
+      default_ruby: 3.3.5
       rubies:
-        - version: 3.3.0
+        - version: 3.3.5

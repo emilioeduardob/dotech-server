@@ -1,46 +1,53 @@
-- name: Add PostgreSQL APT Key
-  apt_key: url="https://www.postgresql.org/media/keys/ACCC4CF8.asc" state=present
-  register: postgres_apt_key_added
-  retries: 10
-  until: postgres_apt_key_added is success
+- name: Download PostgreSQL APT key
+  ansible.builtin.get_url:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    dest: /etc/apt/trusted.gpg.d/postgresql.asc
+    mode: '0644'
+  become: true
+  retries: 3
+  delay: 10
 
-# This makes no changes to the system, so we always set changed_when to false
-- name: Get Ubuntu Release Type
-  command: "lsb_release -cs"
-  changed_when: false
-  register: ubuntu_release_type
-
-- name: Add Postgres Repository
-  apt_repository: repo="deb http://apt.postgresql.org/pub/repos/apt/ {{ ubuntu_release_type.stdout }}-pgdg main"
+- name: Add PostgreSQL repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/postgresql.asc] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+    state: present
+    update_cache: false
+  become: true
   register: postgres_add_apt_repo_ready
 
 - name: Update Apt Cache
-  apt: update_cache=true
+  ansible.builtin.apt:
+    update_cache: true
   when: postgres_add_apt_repo_ready is changed
+  become: true
   register: postgres_apt_is_fresh
 
-- name: Install postgres
-  apt:
+- name: Install PostgreSQL {{ postgresql_version }}
+  ansible.builtin.apt:
     state: present
-    name:
-      - postgresql-server-dev-11
-      - postgresql-11
-      - postgresql-contrib-11
-  become: True
+    update_cache: "{{ postgres_add_apt_repo_ready is changed }}"
+    name: "{{ postgresql_packages }}"
+    cache_valid_time: 3600
+  become: true
+  tags:
+    - postgresql
+
+- name: Ensure PostgreSQL is started and enabled
+  ansible.builtin.systemd:
+    name: postgresql
+    state: started
+    enabled: true
+  become: true
   tags:
     - postgresql
 
 - name: Config security for postgres user
-  lineinfile:
-    dest: /etc/postgresql/11/main/pg_hba.conf
+  ansible.builtin.lineinfile:
+    dest: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
     regexp: '^local\s+all\s+postgres+\s+peer'
     line: "local   all             postgres                                trust"
     state: present
-  become: True
-  tags:
-    - postgresql
-
-- service: name=postgresql state=restarted enabled=yes
-  become: True
+  become: true
+  notify: restart postgresql
   tags:
     - postgresql

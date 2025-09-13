@@ -1,3 +1,6 @@
-- src: zzet.rbenv
-- src: gantsign.oh-my-zsh
-- src: geerlingguy.nodejs
+---
+roles:
+  - src: zzet.rbenv
+  - src: gantsign.oh-my-zsh
+  - src: geerlingguy.nodejs
+  - src: geerlingguy.swap

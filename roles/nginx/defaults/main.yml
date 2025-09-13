@@ -1,0 +1,12 @@
+---
+# Nginx configuration defaults
+nginx_remove_default_site: true
+nginx_enable_firewall_rules: true
+
+# Nginx packages to install
+nginx_packages:
+  - nginx
+
+# Firewall ports to allow
+nginx_http_port: 80
+nginx_https_port: 443

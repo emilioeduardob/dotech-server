@@ -1,6 +1,55 @@
 ---
-- name: Install nginx ppa
-  apt_repository: repo='ppa:nginx/stable' state=present
+# Install nginx from Ubuntu repository (reliable and well-maintained)
+- name: Install nginx from Ubuntu repository
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
 
-- name: Install nginx
-  apt: name=nginx state=present
+- name: Ensure nginx is started and enabled
+  ansible.builtin.systemd:
+    name: nginx
+    state: started
+    enabled: true
+  become: true
+
+- name: Allow HTTP traffic through firewall
+  ansible.builtin.ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+  become: true
+  when: ansible_os_family == "Debian"
+  ignore_errors: true
+
+- name: Allow HTTPS traffic through firewall
+  ansible.builtin.ufw:
+    rule: allow
+    port: '443'
+    proto: tcp
+  become: true
+  when: ansible_os_family == "Debian"
+  ignore_errors: true
+
+- name: Create nginx configuration directory
+  ansible.builtin.file:
+    path: /etc/nginx/sites-available
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Create nginx sites-enabled directory
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Remove default nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: true
+  notify: reload nginx

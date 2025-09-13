@@ -1,0 +1,17 @@
+---
+# PostgreSQL version to install (15 for broader compatibility)
+postgresql_version: "15"
+
+# PostgreSQL packages to install
+postgresql_packages:
+  - "postgresql-{{ postgresql_version }}"
+  - "postgresql-contrib-{{ postgresql_version }}"
+  - "postgresql-server-dev-{{ postgresql_version }}"
+  - "python3-psycopg2"
+
+# PostgreSQL configuration
+postgresql_hba_entries:
+  - { type: local, database: all, user: postgres, auth_method: trust }
+  - { type: local, database: all, user: all, auth_method: peer }
+  - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
+  - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }
