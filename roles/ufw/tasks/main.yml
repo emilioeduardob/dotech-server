@@ -2,6 +2,7 @@
 - name: Install UFW
   tags:
     - firewall
+  become: true
   apt: name=ufw state=present
 
 - name: Setup ufw
