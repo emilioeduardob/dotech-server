@@ -1,6 +1,6 @@
 ---
-# PostgreSQL version to install (15 for broader compatibility)
-postgresql_version: "15"
+# PostgreSQL version to install
+postgresql_version: "18"
 
 # PostgreSQL packages to install
 postgresql_packages:
